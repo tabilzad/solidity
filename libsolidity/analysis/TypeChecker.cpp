@@ -2750,8 +2750,14 @@ bool TypeChecker::visit(MemberAccess const& _memberAccess)
 			);
 
 		if (!funType->bound())
-			if (auto contractType = dynamic_cast<ContractType const*>(exprType))
-				requiredLookup = contractType->isSuper() ? VirtualLookup::Super : VirtualLookup::Virtual;
+		{
+			if (auto typeType = dynamic_cast<TypeType const*>(exprType))
+			{
+				auto contractType = dynamic_cast<ContractType const*>(typeType->actualType());
+				if (contractType && contractType->isSuper())
+					requiredLookup = VirtualLookup::Super;
+			}
+		}
 	}
 
 	annotation.requiredLookup = requiredLookup;
@@ -2826,8 +2832,13 @@ bool TypeChecker::visit(MemberAccess const& _memberAccess)
 					_memberAccess.location(),
 					"\"runtimeCode\" is not available for contracts containing immutable variables."
 				);
-
-			if (m_currentContract)
+			if (accessedContractType.isSuper())
+				m_errorReporter.typeError(
+					3625_error,
+					_memberAccess.location(),
+					"\"creationCode\" and \"runtimeCode\" are not available for the \"super\" contract."
+				);
+			else if (m_currentContract)
 			{
 				// TODO in the same way as with ``new``,
 				// this is not properly detecting creation-cycles if they go through
