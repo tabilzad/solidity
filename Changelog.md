@@ -4,6 +4,8 @@
 Bugfixes:
  * SMTChecker: Fix lack of reporting potential violations when using only the CHC engine.
 
+Compiler Features:
+ * Yul Optimizer: Prune return parameters of functions that are unused at callsite.
 
 
 ### 0.7.4 (2020-10-19)
