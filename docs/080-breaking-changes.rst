@@ -32,6 +32,10 @@ the compiler notifying you about it.
   This will save gas on errors while it still allows static analysis tools to distinguish
   these situations from a revert on invalid input, like a failing ``require``.
 
+* ABI coder v2 is enabled by default. You can switch back to ABI coder v1 by using
+  ``pragma abicoder v1;`` or enable it explicitly sing ``pragma abicoder v2;``.
+
+
 New Restrictions
 ================
 
